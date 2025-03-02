@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Service Application Wizard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .wizard-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+    .wizard-step {
+      display: none;
+    }
+    .wizard-step.active {
+      display: block;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="wizard-container">
+    <!-- Step 1: Application Selection -->
+    <div class="wizard-step active" id="step1">
+      <h2>Step 1: Application Selection</h2>
+      <label for="appName">Application Name</label>
+      <input type="text" id="appName" placeholder="Enter application name">
+      <div class="button-group">
+        <button disabled>Previous</button>
+        <button onclick="nextStep(2)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Integration Method -->
+    <div class="wizard-step" id="step2">
+      <h2>Step 2: Integration Method</h2>
+      <label for="integrationMethod">How does the application expose data?</label>
+      <select id="integrationMethod">
+        <option value="rest-api">REST API</option>
+        <option value="database">Database</option>
+        <option value="file-extract">File Extract</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="button-group">
+        <button onclick="prevStep(1)">Previous</button>
+        <button onclick="nextStep(3)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Configuration -->
+    <div class="wizard-step" id="step3">
+      <h2>Step 3: Configuration</h2>
+      <label for="apiEndpoint">API Endpoint (if applicable)</label>
+      <input type="text" id="apiEndpoint" placeholder="Enter API endpoint">
+      <label for="credentials">Credentials</label>
+      <input type="text" id="credentials" placeholder="Enter credentials">
+      <label for="fileFormat">File Format (if applicable)</label>
+      <input type="text" id="fileFormat" placeholder="Enter file format">
+      <div class="button-group">
+        <button onclick="prevStep(2)">Previous</button>
+        <button onclick="nextStep(4)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Review & Submit -->
+    <div class="wizard-step" id="step4">
+      <h2>Step 4: Review & Submit</h2>
+      <p><strong>Application Name:</strong> <span id="reviewAppName"></span></p>
+      <p><strong>Integration Method:</strong> <span id="reviewIntegrationMethod"></span></p>
+      <p><strong>API Endpoint:</strong> <span id="reviewApiEndpoint"></span></p>
+      <p><strong>Credentials:</strong> <span id="reviewCredentials"></span></p>
+      <p><strong>File Format:</strong> <span id="reviewFileFormat"></span></p>
+      <div class="button-group">
+        <button onclick="prevStep(3)">Previous</button>
+        <button onclick="submitForm()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    function showStep(step) {
+      document.querySelectorAll('.wizard-step').forEach((el) => {
+        el.classList.remove('active');
+      });
+      document.getElementById(`step${step}`).classList.add('active');
+    }
+
+    function nextStep(step) {
+      if (step === 4) {
+        // Populate review fields
+        document.getElementById('reviewAppName').textContent = document.getElementById('appName').value;
+        document.getElementById('reviewIntegrationMethod').textContent = document.getElementById('integrationMethod').value;
+        document.getElementById('reviewApiEndpoint').textContent = document.getElementById('apiEndpoint').value;
+        document.getElementById('reviewCredentials').textContent = document.getElementById('credentials').value;
+        document.getElementById('reviewFileFormat').textContent = document.getElementById('fileFormat').value;
+      }
+      currentStep = step;
+      showStep(step);
+    }
+
+    function prevStep(step) {
+      currentStep = step;
+      showStep(step);
+    }
+
+    function submitForm() {
+      alert('Form submitted successfully!');
+      // Here you can add logic to send data to the backend
+    }
+  </script>
+</body>
+</html>
